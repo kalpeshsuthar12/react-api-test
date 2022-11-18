@@ -5,8 +5,7 @@ export default function ProductSection() {
 
     const [amazon, setAmazon] = useState("");
     const [flipkart, setflipkart] = useState("");
-    const [allProduct, setAllProduct] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState();
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     const amazonUrl = "https://dummyjson.com/products";
     const flipkartUrl = "https://fakestoreapi.com/products";
@@ -14,14 +13,14 @@ export default function ProductSection() {
         let amazonData = await axios(amazonUrl);
         setAmazon(amazonData.data.products)
         let flipkartData = await axios(flipkartUrl);
-        setflipkart(flipkartData.data)
-        let allData = [...amazon, ...flipkart];
-        setAllProduct(allData);
+        setflipkart(flipkartData.data);        
     }
 
+    const allData = [...flipkart,...amazon ];
+
     function getFilteredList() {
-        if (!selectedCategory) {
-          return allProduct;
+        if (selectedCategory==="default") {
+          return allData;
         }
         else if(selectedCategory==="amazon"){
             return amazon;
@@ -30,11 +29,11 @@ export default function ProductSection() {
             return flipkart;
         }
         else{
-            return allProduct;
+            return amazon;
         }
     }
 
-    var filteredList = useMemo(getFilteredList, [selectedCategory]);
+    const filteredList = useMemo(getFilteredList, [selectedCategory, allData]);
 
     useEffect(() => {
         fetchData();
